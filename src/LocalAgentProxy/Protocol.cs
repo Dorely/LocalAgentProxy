@@ -73,7 +73,7 @@ public sealed record ChatRequest(string Model, JsonArray Messages, List<Tool> To
         var tools = new List<Tool>();
         if (json["tools"] is JsonArray catalog)
         {
-            if (catalog.Count > 64) Protocol.Invalid("At most 64 tools are supported.");
+            if (catalog.Count > 128) Protocol.Invalid("At most 128 tools are supported.");
             var names = new HashSet<string>(StringComparer.Ordinal);
             foreach (var item in catalog)
             {

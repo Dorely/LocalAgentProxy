@@ -13,7 +13,7 @@ Origin header are rejected. Request bodies are bounded (16 MiB by default).
 | `messages[].content` | Text; arrays of text; user image_url parts containing PNG/JPEG/GIF/WebP base64 data URLs. Null allowed for assistant tool messages. |
 | `messages[].name` | Preserved as imported historical metadata. |
 | `tool_calls`, `tool_call_id` | Function calls with unique IDs, JSON-object arguments, and matching results. Historical calls must have results. |
-| `tools` | Up to 64 function definitions, unique names matching `[a-zA-Z_][a-zA-Z0-9_-]{0,63}`. Object schemas forwarded to MCP, including `$defs`. |
+| `tools` | Up to 128 function definitions, unique names matching `[a-zA-Z_][a-zA-Z0-9_-]{0,63}`. Object schemas forwarded to MCP, including `$defs`. |
 | `tools[].function.strict` | false or omitted; true rejected. Caller validates arguments against its schema. No schema-constrained generation guarantee. |
 | `tool_choice` | auto/default, none, required, or named function. Required/named with no matching tool is rejected. |
 | `stream` | false/default or true, SSE chat-completion chunks. |

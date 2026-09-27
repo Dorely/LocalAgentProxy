@@ -55,7 +55,8 @@ near-simultaneous text fragment may appear in the following completion.
 
 The channel between each CLI and HTTP response is bounded to 128 events; CLI lines
 are bounded to 8 MiB, aggregate output to 16 MiB characters by default. Input and
-tool results are bounded by HTTP request size. A run admits at most 64 invocations.
+tool results are bounded by HTTP request size. Each catalog admits up to 128
+definitions, independently of the maximum of 64 actual invocations per run.
 Admission bounds conversations and reserves space for invocation tombstones;
 retirement drops all transcript/argument references and retains only ownership
 metadata for one continuation timeout. A one-second sweeper enforces generation
@@ -109,5 +110,6 @@ The Windows test suite covers real fake-process supervision, HTTP translation,
 official OpenAI clients, continuation isolation, cleanup, and protocol fixtures.
 Live MCP interoperability and base64 images were additionally exercised within an
 explicit five-generation subscription budget. See `docs/validation.md` for the
-precise tested scope. `docs/protocol.md` is the supported client contract; no UI
-workflow is implied by API compatibility.
+precise tested scope, including the separately authorized Opus 5.5 Outline and
+Editor browser exercises. `docs/protocol.md` is the supported client contract;
+broader UI compatibility is not implied by those focused exercises.

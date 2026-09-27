@@ -99,8 +99,11 @@ credential automatically read by the management commands.
 The OpenAI .NET **2.8.0**, Microsoft.Extensions.AI **10.4.1**, and
 Microsoft.Extensions.AI.OpenAI **10.3.0** client packages are exercised by the
 deterministic compatibility suite. See [validation](docs/validation.md) for exact
-evidence and transitive dependency details. No Lorekeeper UI workflow has been
-claimed as tested.
+evidence and transitive dependency details. A limited Lorekeeper browser workflow
+was exercised with Opus 5.5: a two-chapter outline and a saved 156-word opening.
+The Editor's larger catalog is supported up to 128 tool definitions. Lorekeeper's
+vision readiness probe currently fails because it supplies unsupported sampling
+and token-limit parameters; this connection is verified for chat only.
 
 ## Subscription policy
 

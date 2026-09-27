@@ -30,6 +30,28 @@ public class ProtocolTests
         Assert.Throws<ProxyException>(() => ChatRequest.Parse(request));
     }
     [Fact]
+    public void LargeCatalogPreservesEverySchemaAndRejectsOverflow()
+    {
+        var request = Request(); Tools(request);
+        var template = request["tools"]![0]!;
+        var catalog = new JsonArray();
+        for (var i = 0; i < 128; i++)
+        {
+            var tool = template.DeepClone();
+            tool["function"]!["name"] = $"fixture_{i}";
+            catalog.Add(tool);
+        }
+        request["tools"] = catalog;
+        var parsed = ChatRequest.Parse(request);
+        Assert.Equal(128, parsed.Tools.Count);
+        Assert.Equal("fixture_127", parsed.Tools[^1].Name);
+        Assert.All(parsed.Tools, tool => Assert.Contains("$defs", tool.InputSchema.GetRawText()));
+        var overflow = template.DeepClone();
+        overflow["function"]!["name"] = "fixture_128";
+        catalog.Add(overflow);
+        Assert.Equal(400, Assert.Throws<ProxyException>(() => ChatRequest.Parse(request)).Status);
+    }
+    [Fact]
     public void ImportsRolesOrderingAndToolAssociations()
     {
         var request = Request();
