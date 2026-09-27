@@ -35,6 +35,9 @@ does not establish vendor permission for a particular subscription use.
 | Official MCP SDK stdio transport and private HTTP forwarding | `Bridge.cs` |
 
 The HTTP client supplies the complete authoritative request. The broker validates
+the exact requested model without fallback. New configurations advertise
+`claude-opus-5-5` first, followed by the optional moving CLI aliases; discovery is
+not a model override or an account entitlement check. The broker validates
 any pending continuation against its original application identity and expected
 history. New runs acquire a fair generation lease before launching. On a real MCP
 callback, the broker assigns its identity and releases the lease; the CLI is

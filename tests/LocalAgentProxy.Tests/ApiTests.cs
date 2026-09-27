@@ -21,10 +21,10 @@ public class ApiTests
     public async Task OpenAiClientTextStreamingAndExtensionsAdapterWork()
     {
         await using var host = await TestHost.StartAsync();
-        var client = new OpenAIClient(new ApiKeyCredential(host.Key), new OpenAIClientOptions { Endpoint = new Uri(host.Options.Url + "/v1") }).GetChatClient("claude-exact-20260901");
+        var client = new OpenAIClient(new ApiKeyCredential(host.Key), new OpenAIClientOptions { Endpoint = new Uri(host.Options.Url + "/v1") }).GetChatClient("claude-opus-5-5");
         var response = await client.CompleteChatAsync([new UserChatMessage("hello")]);
         Assert.Equal("Hello 雪 🌍", response.Value.Content[0].Text);
-        Assert.Equal("claude-exact-20260901", response.Value.Model);
+        Assert.Equal("claude-opus-5-5", response.Value.Model);
         var streamed = new StringBuilder();
         await foreach (var update in client.CompleteChatStreamingAsync([new UserChatMessage("hello")]))
             foreach (var part in update.ContentUpdate) streamed.Append(part.Text);

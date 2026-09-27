@@ -1,5 +1,6 @@
 param(
     [Parameter(Mandatory = $true)][ValidateRange(3, 3)][int]$AuthorizedGenerations,
+    [string]$Model = 'claude-opus-5-5',
     [string]$Executable = "$PSScriptRoot\..\src\LocalAgentProxy\bin\Release\net10.0\LocalAgentProxy.exe"
 )
 $ErrorActionPreference = 'Stop'
@@ -21,7 +22,7 @@ try {
     $messages = @(@{ role = 'user'; content = 'Call read_fixture exactly once. After it returns, answer with the exact value returned. Do not guess the value.' })
     $tools = @(@{ type = 'function'; function = @{ name = 'read_fixture'; description = 'Read a fixture string supplied by the caller'; parameters = @{ type = 'object'; properties = @{}; additionalProperties = $false } } })
     $issued++
-    $first = Chat @{ model = 'sonnet'; messages = $messages; tools = $tools }
+    $first = Chat @{ model = $Model; messages = $messages; tools = $tools }
     if ($first.choices[0].finish_reason -ne 'tool_calls') { throw 'Expected real tool invocation.' }
     $status = Invoke-RestMethod -Uri "$base/v1/status" -Headers $headers
     if ($status.conversations -ne 1 -or $status.active_generation) { throw 'Waiting tool did not release generation capacity.' }
@@ -29,7 +30,7 @@ try {
     $messages += $first.choices[0].message
     $messages += @{ role = 'tool'; tool_call_id = $first.choices[0].message.tool_calls[0].id; content = $nonce }
     $issued++
-    $second = Chat @{ model = 'sonnet'; messages = $messages; tools = $tools }
+    $second = Chat @{ model = $Model; messages = $messages; tools = $tools }
     if ($second.choices[0].finish_reason -ne 'stop' -or -not $second.choices[0].message.content.Contains($nonce)) { throw 'Final answer did not contain actual caller result.' }
     $status = Invoke-RestMethod -Uri "$base/v1/status" -Headers $headers
     if ($status.conversations -ne 0) { throw 'Completed continuation was not reclaimed.' }
@@ -45,7 +46,7 @@ try {
         $data = [Convert]::ToBase64String($memory.ToArray())
     } finally { $graphics.Dispose(); $bitmap.Dispose(); $memory.Dispose() }
     $issued++
-    $image = Chat @{ model = 'sonnet'; messages = @(@{ role = 'user'; content = @(@{type='text'; text='What is the dominant color of this image? Reply with one color word.'}, @{type='image_url'; image_url=@{url="data:image/png;base64,$data"}}) }) }
+    $image = Chat @{ model = $Model; messages = @(@{ role = 'user'; content = @(@{type='text'; text='What is the dominant color of this image? Reply with one color word.'}, @{type='image_url'; image_url=@{url="data:image/png;base64,$data"}}) }) }
     if ($image.choices[0].message.content -notmatch '(?i)red') { throw 'Image result did not identify the fixture color.' }
     Write-Output 'PASS: base64 image input identified the fixture color.'
 } finally {

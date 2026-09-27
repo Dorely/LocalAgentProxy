@@ -35,9 +35,10 @@ The initial implementation used all five authorized generations; none remain fro
 that authorization. See the validation record.
 
 For a separately authorized three-generation check, start an idle proxy yourself,
-then run `scripts/Invoke-LiveValidation.ps1 -AuthorizedGenerations 3`. It creates a
-temporary application key, exercises a real tool/result round trip and an inline
-image, then revokes its key. It does not start or stop a potentially user-owned
+then run `scripts/Invoke-LiveValidation.ps1 -AuthorizedGenerations 3`. Requests use
+the exact `claude-opus-5-5` ID by default (`-Model` can override it). The script
+creates a temporary application key, exercises a real tool/result round trip and
+an inline image, then revokes its key. It does not start or stop a potentially user-owned
 host. Stop the host you started when finished. Calls are intentionally short and
 tools are harmless. Record actual failures and usage; do not retry outside the
 budget. A successful tool round trip requires two model generations.

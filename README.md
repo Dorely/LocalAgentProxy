@@ -35,11 +35,17 @@ Save the key shown by `clients add`; only its hash is stored. Configure the clie
 | --- | --- |
 | Base URL | `http://127.0.0.1:17432/v1` |
 | API key | The application's generated key |
-| Model | `sonnet`, `opus`, `haiku`, or a supported exact Claude model ID |
+| Model | `claude-opus-5-5` (Opus 5.5) |
 
 Disable client sampling/token-limit options that the CLI cannot honor. Requests
 containing unsupported parameters fail explicitly. See the
 [parameter matrix](docs/protocol.md) before configuring a client.
+
+The discovery list includes Opus 5.5 first. Other supported exact model IDs and
+the moving `sonnet`, `opus`, and `haiku` aliases remain available when explicitly
+requested. The proxy always uses the request's model; it has no implicit model
+fallback. Existing installations can update `Models` in their local `config.json`
+while stopped to change the discovery list.
 
 ## Management
 

@@ -17,7 +17,7 @@ public sealed record ProxyOptions
     public int ContinuationSeconds { get; init; } = 600;
     public int MaxRequestBytes { get; init; } = 16 * 1024 * 1024;
     public long MaxOutputCharacters { get; init; } = 16 * 1024 * 1024;
-    public string[] Models { get; init; } = ["sonnet", "opus", "haiku"];
+    public string[] Models { get; init; } = ["claude-opus-5-5", "sonnet", "opus", "haiku"];
     public void Validate()
     {
         if (!Uri.TryCreate(Url, UriKind.Absolute, out var uri) || uri.Scheme != "http" || uri.Host != "127.0.0.1"
